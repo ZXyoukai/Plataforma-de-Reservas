@@ -1,0 +1,19 @@
+version : '3.8'
+
+services:
+  database
+    image: mongo:lastest
+
+  backend:
+    build:
+      dockerfile: ./backend
+    ports:
+      - 3000:3000
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+        - 5173:8080
+      
