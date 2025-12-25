@@ -7,6 +7,7 @@ import { UserRegistrationModule } from './user-registration/user-registration.mo
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ManageModule } from './manage/manage.module';
 import { ReservationModule } from './reservation/reservation.module';
+import { ServiceModule } from './service/service.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ReservationModule } from './reservation/reservation.module';
     AuthenticationModule,
     ManageModule,
     ReservationModule,
+    ServiceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -23,37 +23,41 @@ enum Status {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  nif       String   @unique
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  email     String    @unique
+  nif       String    @unique
   name      String
   password  String
-  credit    Float    @default(0)
-  role      Role     @default(CLIENT)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  credit    Float     @default(0)
+  role      Role      @default(CLIENT)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  services  Service[] @relation("ProviderServices")
 }
 
-model service {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String
-  price       Float
-  providerId  String   @db.ObjectId
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model Service {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  description  String
+  price        Float
+  providerId   String        @db.ObjectId
+  provider     User          @relation("ProviderServices", fields: [providerId], references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  reservations Reservation[]
 
   @@index([providerId])
 }
 
 model Reservation {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId     String   @db.ObjectId
-  serviceId  String   @db.ObjectId
-  date       DateTime
-  status     Status   @default(PENDING)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  serviceId String   @db.ObjectId
+  service   Service  @relation(fields: [serviceId], references: [id])
+  date      DateTime
+  status    Status   @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@index([serviceId])
