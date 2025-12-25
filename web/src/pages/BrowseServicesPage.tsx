@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useServiceStore } from '../store/service.store';
 import { useReservationStore } from '../store/reservation.store';
 import { useAuthStore } from '../store/auth.store';
+import { authService } from '../services/auth.service';
 import type { Service } from '../types/service.types';
 import { UserRole } from '../types/auth.types';
 
@@ -70,11 +71,25 @@ export const BrowseServicesPage = () => {
       setShowConfirmModal(false);
       setSelectedService(null);
       
-      // Atualizar saldo do usuário (recarregar do backend seria ideal)
-      // Por enquanto, apenas fechamos o modal
-      setTimeout(() => {
-        window.location.reload(); // Recarrega para atualizar o saldo
-      }, 2000);
+      // Recarregar perfil do usuário para atualizar o saldo
+      // sem perder a autenticação
+      try {
+        const updatedUser = await authService.getProfile();
+        
+        // Atualizar no localStorage e no store
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        
+        // Navega para o dashboard
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 2000);
+      } catch (profileError) {
+        console.error('Erro ao atualizar perfil:', profileError);
+        // Se falhar, apenas navega para o dashboard
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 2000);
+      }
     } catch (error) {
       console.error('Erro ao contratar serviço:', error);
       setShowConfirmModal(false);

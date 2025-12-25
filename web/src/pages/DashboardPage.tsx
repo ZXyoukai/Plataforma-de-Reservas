@@ -145,7 +145,29 @@ export const DashboardPage = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-lg">Histórico</h3>
-                  <p className="text-gray-400 text-sm">Ver todas as transações</p>
+                  <p className="text-gray-400 text-sm">Veja todas as suas transações</p>
+                </div>
+              </div>
+            </button>
+
+            {/* Gerenciar Reservas - Disponível para todos */}
+            <button
+              onClick={() => navigate('/reservations')}
+              className="card hover:border-primary/50 transition cursor-pointer text-left group"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition">
+                  <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg">Minhas Reservas</h3>
+                  <p className="text-gray-400 text-sm">
+                    {user?.role === UserRole.SERVICE_PROVIDER 
+                      ? 'Gerencie as reservas dos seus serviços'
+                      : 'Veja e gerencie suas reservas'}
+                  </p>
                 </div>
               </div>
             </button>

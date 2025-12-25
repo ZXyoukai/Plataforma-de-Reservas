@@ -27,10 +27,18 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Apenas faz logout em 401 se for erro de token inválido/expirado
+    // Não faz logout em erro de credenciais inválidas no login
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+      const isLoginPage = window.location.pathname === '/login';
+      const isRegisterPage = window.location.pathname === '/register';
+      
+      // Não redireciona se já estiver na página de login/registro
+      if (!isLoginPage && !isRegisterPage) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

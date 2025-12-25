@@ -6,6 +6,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { ServicesPage } from './pages/ServicesPage';
 import { BrowseServicesPage } from './pages/BrowseServicesPage';
 import { TransactionsPage } from './pages/TransactionsPage';
+import { ReservationsPage } from './pages/ReservationsPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { useAuthStore } from './store/auth.store';
 
@@ -51,6 +52,14 @@ function App() {
           element={
             <ProtectedRoute>
               <TransactionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reservations"
+          element={
+            <ProtectedRoute>
+              <ReservationsPage />
             </ProtectedRoute>
           }
         />

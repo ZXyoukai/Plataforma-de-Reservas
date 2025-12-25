@@ -20,37 +20,40 @@ export const TransactionsPage = () => {
 
   // Carregar reservas ao montar
   useEffect(() => {
-    if (user?.role === UserRole.CLIENT) {
+    if (!user) return;
+    
+    const isClient = user.role === UserRole.CLIENT || user.role === 'CLIENT';
+    const isProvider = user.role === UserRole.SERVICE_PROVIDER || user.role === 'SERVICE_PROVIDER';
+    
+    if (isClient) {
       fetchMyReservations(); // Clientes veem suas contratações (débitos)
-    } else if (user?.role === UserRole.SERVICE_PROVIDER) {
+    } else if (isProvider) {
       fetchServiceReservations(); // Prestadores veem receitas (créditos)
     }
   }, [user, fetchMyReservations, fetchServiceReservations]);
 
-  const getTransactionType = (reservation: Reservation): 'DEBIT' | 'CREDIT' => {
-    if (user?.role === UserRole.CLIENT) {
-      return 'DEBIT'; // Cliente pagou
-    }
-    return 'CREDIT'; // Prestador recebeu
+  const isClientRole = () => {
+    return user?.role === UserRole.CLIENT || user?.role === 'CLIENT';
+  };
+
+  const getTransactionType = (): 'DEBIT' | 'CREDIT' => {
+    return isClientRole() ? 'DEBIT' : 'CREDIT';
   };
 
   const getRelatedUserName = (reservation: Reservation): string => {
-    if (user?.role === UserRole.CLIENT) {
+    if (isClientRole()) {
       return reservation.providerName || 'Prestador';
     }
     return reservation.clientName || 'Cliente';
   };
 
   const getRelatedUserLabel = (): string => {
-    if (user?.role === UserRole.CLIENT) {
-      return 'Prestador';
-    }
-    return 'Cliente';
+    return isClientRole() ? 'Prestador' : 'Cliente';
   };
 
-  const filteredReservations = reservations.filter(reservation => {
+  const filteredReservations = reservations.filter(() => {
     if (filter === 'all') return true;
-    const type = getTransactionType(reservation);
+    const type = getTransactionType();
     return filter === type.toLowerCase();
   });
 
@@ -82,8 +85,26 @@ export const TransactionsPage = () => {
   };
 
   const calculateTotalAmount = () => {
-    return filteredReservations.reduce((sum, reservation) => sum + reservation.servicePrice, 0);
+    if (!filteredReservations || filteredReservations.length === 0) return 0;
+    return filteredReservations.reduce((sum, reservation) => {
+      return sum + (reservation.servicePrice || 0);
+    }, 0);
   };
+
+  // Verifica se o usuário está carregado
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-dark via-dark-light to-dark flex items-center justify-center">
+        <div className="text-center">
+          <svg className="animate-spin h-12 w-12 text-primary mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <p className="text-gray-400">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -221,14 +242,14 @@ export const TransactionsPage = () => {
                 </thead>
                 <tbody className="divide-y divide-dark-lighter">
                   {filteredReservations.map((reservation) => {
-                    const type = getTransactionType(reservation);
+                    const type = getTransactionType();
                     return (
                       <tr key={reservation.id} className="hover:bg-dark-lighter/30 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          {formatDate(reservation.createdAt)}
+                          {reservation.createdAt ? formatDate(reservation.createdAt) : '-'}
                         </td>
                         <td className="px-6 py-4 text-sm font-medium">
-                          {reservation.serviceName}
+                          {reservation.serviceName || 'Serviço não identificado'}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-400">
                           {getRelatedUserName(reservation)}
@@ -244,11 +265,11 @@ export const TransactionsPage = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold">
                           <span className={type === 'DEBIT' ? 'text-red-500' : 'text-green-500'}>
-                            {type === 'DEBIT' ? '-' : '+'} {reservation.servicePrice.toFixed(2)} AOA
+                            {type === 'DEBIT' ? '-' : '+'} {(reservation.servicePrice || 0).toFixed(2)} AOA
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {getStatusBadge(reservation.status)}
+                          {getStatusBadge(reservation.status || 'PENDING')}
                         </td>
                       </tr>
                     );

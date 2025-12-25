@@ -9,7 +9,7 @@ export interface User {
   nif: string;
   name: string;
   credit: number;
-  role: UserRole;
+  role: UserRole | string; // Pode vir como string do backend
   createdAt: Date;
   updatedAt: Date;
 }
