@@ -12,20 +12,20 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   async onModuleInit() {
     try {
       await this.$connect();
-      this.logger.log('✅ Prisma Client conectado ao MongoDB');
+      this.logger.log('✅ Prisma Client conectado ao PostgreSQL');
     } catch (error) {
-      this.logger.error('Erro ao conectar ao MongoDB:', error.message);
+      this.logger.error('Erro ao conectar ao PostgreSQL:', error.message);
       this.logger.warn('A aplicação continuará, mas as operações de banco de dados falharão');
       this.logger.warn('Verifique:');
-      this.logger.warn('   1. Se o MongoDB Atlas está acessível');
-      this.logger.warn('   2. Se a senha no DATABASE_URL está correta');
-      this.logger.warn('   3. Se seu IP está na whitelist do MongoDB Atlas');
+      this.logger.warn('   1. Se o PostgreSQL está acessível');
+      this.logger.warn('   2. Se a DATABASE_URL no .env está correta');
+      this.logger.warn('   3. Se as credenciais de acesso estão corretas');
     }
   }
 
   async onModuleDestroy() {
     await this.$disconnect();
-    console.log('Prisma Client desconectado do MongoDB');
+    console.log('Prisma Client desconectado do PostgreSQL');
   }
 
   async cleanDatabase() {
