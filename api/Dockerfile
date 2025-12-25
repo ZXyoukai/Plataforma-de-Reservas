@@ -1,5 +1,8 @@
 # Dockerfile para API NestJS
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
+
+# Instalar OpenSSL e outras dependências necessárias para Prisma
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
 # Instalar pnpm
 RUN npm install -g pnpm
@@ -23,7 +26,10 @@ RUN pnpm prisma generate
 RUN pnpm build
 
 # Produção
-FROM node:20-alpine
+FROM node:20-slim
+
+# Instalar OpenSSL para Prisma
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
 # Instalar pnpm
 RUN npm install -g pnpm
