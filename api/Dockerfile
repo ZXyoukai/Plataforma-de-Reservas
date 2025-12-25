@@ -34,8 +34,8 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 COPY prisma ./prisma/
 
-# Instalar apenas dependências de produção
-RUN pnpm install --prod --frozen-lockfile
+# Instalar apenas dependências de produção + prisma CLI para gerar o client
+RUN pnpm install --prod --frozen-lockfile && pnpm add prisma@^5.22.0
 
 # Gerar Prisma Client
 RUN pnpm prisma generate
