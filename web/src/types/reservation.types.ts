@@ -11,11 +11,12 @@ export interface Reservation {
   id: string;
   serviceId: string;
   serviceName: string;
-  servicePrice: number;
-  clientId: string;
-  clientName: string;
-  providerId: string;
-  providerName: string;
+  servicePrice?: number; // Pode vir como servicePrice (antigo)
+  amount?: number; // Ou como amount (do backend)
+  clientId?: string;
+  clientName?: string;
+  providerId?: string;
+  providerName?: string;
   status: ReservationStatus;
   createdAt: Date;
   updatedAt: Date;

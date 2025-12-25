@@ -23,18 +23,57 @@ export const ReservationsPage = () => {
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [newStatus, setNewStatus] = useState<string>('');
+  const [initialLoading, setInitialLoading] = useState(true);
 
   const isProvider = user?.role === UserRole.SERVICE_PROVIDER || user?.role === 'SERVICE_PROVIDER';
 
   useEffect(() => {
-    if (!user) return;
-    
-    if (isProvider) {
-      fetchServiceReservations();
-    } else {
-      fetchMyReservations();
+    if (!user) {
+      setInitialLoading(false);
+      return;
     }
+    
+    const loadReservations = async () => {
+      try {
+        console.log('Carregando reservas para:', { 
+          userId: user.id, 
+          role: user.role, 
+          isProvider 
+        });
+        
+        if (isProvider) {
+          await fetchServiceReservations();
+        } else {
+          await fetchMyReservations();
+        }
+        
+        console.log('Reservas carregadas com sucesso');
+      } catch (error: any) {
+        console.error('Erro ao carregar reservas:', error);
+        console.error('Detalhes do erro:', {
+          status: error.response?.status,
+          data: error.response?.data,
+          message: error.message
+        });
+        // Não faz logout aqui, apenas mostra o erro
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+    
+    loadReservations();
   }, [user, isProvider, fetchMyReservations, fetchServiceReservations]);
+
+  // Debug: Log sempre que reservations mudar
+  useEffect(() => {
+    console.log('Reservas atualizadas:', { 
+      count: reservations?.length ?? 0, 
+      reservations,
+      error,
+      isLoading,
+      initialLoading 
+    });
+  }, [reservations, error, isLoading, initialLoading]);
 
   const handleStatusChange = (reservation: Reservation) => {
     setSelectedReservation(reservation);
@@ -105,10 +144,20 @@ export const ReservationsPage = () => {
   };
 
   if (!user) {
-    return null;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-dark via-dark-light to-dark flex items-center justify-center">
+        <div className="text-center">
+          <svg className="animate-spin h-12 w-12 text-primary mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <p className="text-gray-400">Carregando usuário...</p>
+        </div>
+      </div>
+    );
   }
 
-  if (isLoading) {
+  if (isLoading || initialLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-dark via-dark-light to-dark flex items-center justify-center">
         <div className="text-center">
@@ -153,7 +202,7 @@ export const ReservationsPage = () => {
           </div>
         )}
 
-        {reservations.length === 0 ? (
+        {!reservations || reservations.length === 0 ? (
           <div className="card text-center py-12">
             <svg className="w-16 h-16 text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -170,20 +219,22 @@ export const ReservationsPage = () => {
             {reservations.map((reservation) => (
               <div key={reservation.id} className="card">
                 <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-lg font-bold">{reservation.serviceName}</h3>
-                  {getStatusBadge(reservation.status)}
+                  <h3 className="text-lg font-bold">{reservation.serviceName || 'Serviço'}</h3>
+                  {getStatusBadge(reservation.status || 'PENDING')}
                 </div>
 
                 <div className="space-y-2 mb-4">
                   <p className="text-sm text-gray-400">
                     <strong>{isProvider ? 'Cliente:' : 'Prestador:'}</strong>{' '}
-                    {isProvider ? reservation.clientName : reservation.providerName}
+                    {isProvider 
+                      ? (reservation.clientName || 'Cliente não identificado')
+                      : (reservation.providerName || 'Prestador não identificado')}
                   </p>
                   <p className="text-sm text-gray-400">
                     <strong>Data:</strong> {formatDate(reservation.createdAt)}
                   </p>
                   <p className="text-lg font-bold text-primary">
-                    {reservation.servicePrice.toFixed(2)} AOA
+                    {(reservation.amount || reservation.servicePrice || 0).toFixed(2)} AOA
                   </p>
                 </div>
 
@@ -221,7 +272,7 @@ export const ReservationsPage = () => {
             <div className="space-y-3 mb-6">
               <p><strong>Serviço:</strong> {selectedReservation.serviceName}</p>
               <p><strong>Cliente:</strong> {selectedReservation.clientName}</p>
-              <p><strong>Valor:</strong> {selectedReservation.servicePrice.toFixed(2)} AOA</p>
+              <p><strong>Valor:</strong> {(selectedReservation.amount || selectedReservation.servicePrice || 0).toFixed(2)} AOA</p>
             </div>
 
             <div className="mb-6">

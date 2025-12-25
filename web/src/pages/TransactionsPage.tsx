@@ -86,8 +86,10 @@ export const TransactionsPage = () => {
 
   const calculateTotalAmount = () => {
     if (!filteredReservations || filteredReservations.length === 0) return 0;
+    // Soma simples - todas as transações são do mesmo tipo baseado no role
     return filteredReservations.reduce((sum, reservation) => {
-      return sum + (reservation.servicePrice || 0);
+      const value = reservation.amount || reservation.servicePrice || 0;
+      return sum + value;
     }, 0);
   };
 
@@ -147,16 +149,21 @@ export const TransactionsPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
           {/* Card Total */}
           <div className="card">
-            <h3 className="text-sm text-gray-400 mb-2">Total Transacionado</h3>
-            <p className="text-2xl font-bold text-primary">
+            <h3 className="text-sm text-gray-400 mb-2">
+              {isClientRole() ? 'Total Gasto' : 'Total Recebido'}
+            </h3>
+            <p className={`text-2xl font-bold ${isClientRole() ? 'text-red-500' : 'text-green-500'}`}>
               {calculateTotalAmount().toFixed(2)} AOA
+            </p>
+            <p className="text-xs text-gray-500 mt-1">
+              {isClientRole() ? 'Saídas (Débito)' : 'Entradas (Crédito)'}
             </p>
           </div>
 
           {/* Card Quantidade */}
           <div className="card">
             <h3 className="text-sm text-gray-400 mb-2">Total de Transações</h3>
-            <p className="text-2xl font-bold">{filteredReservations.length}</p>
+            <p className="text-2xl font-bold text-primary">{filteredReservations.length}</p>
           </div>
 
           {/* Filtros */}
@@ -265,7 +272,7 @@ export const TransactionsPage = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold">
                           <span className={type === 'DEBIT' ? 'text-red-500' : 'text-green-500'}>
-                            {type === 'DEBIT' ? '-' : '+'} {(reservation.servicePrice || 0).toFixed(2)} AOA
+                            {type === 'DEBIT' ? '-' : '+'} {(reservation.amount || reservation.servicePrice || 0).toFixed(2)} AOA
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">

@@ -9,6 +9,9 @@ export const api = axios.create({
   },
 });
 
+// Flag para controlar se já estamos redirecionando
+let isRedirecting = false;
+
 // Interceptor para adicionar o token JWT em todas as requisições
 api.interceptors.request.use(
   (config) => {
@@ -34,10 +37,20 @@ api.interceptors.response.use(
       const isRegisterPage = window.location.pathname === '/register';
       
       // Não redireciona se já estiver na página de login/registro
-      if (!isLoginPage && !isRegisterPage) {
+      // E só redireciona uma vez para evitar loops
+      if (!isLoginPage && !isRegisterPage && !isRedirecting) {
+        isRedirecting = true;
+        
+        console.log('Token inválido ou expirado. Redirecionando para login...');
+        
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        window.location.href = '/login';
+        
+        // Pequeno delay para garantir que o localStorage foi limpo
+        setTimeout(() => {
+          window.location.href = '/login';
+          isRedirecting = false;
+        }, 100);
       }
     }
     return Promise.reject(error);

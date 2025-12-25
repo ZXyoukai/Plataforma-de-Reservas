@@ -42,7 +42,8 @@ export const useReservationStore = create<ReservationState>((set) => ({
       set({ reservations, isLoading: false });
     } catch (error: any) {
       const errorMessage = extractErrorMessage(error);
-      set({ error: errorMessage, isLoading: false });
+      console.error('Erro ao buscar minhas reservas:', error);
+      set({ error: errorMessage, isLoading: false, reservations: [] });
     }
   },
 
@@ -53,7 +54,8 @@ export const useReservationStore = create<ReservationState>((set) => ({
       set({ reservations, isLoading: false });
     } catch (error: any) {
       const errorMessage = extractErrorMessage(error);
-      set({ error: errorMessage, isLoading: false });
+      console.error('Erro ao buscar reservas dos serviços:', error);
+      set({ error: errorMessage, isLoading: false, reservations: [] });
     }
   },
 
