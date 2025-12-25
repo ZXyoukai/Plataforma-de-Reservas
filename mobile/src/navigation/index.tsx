@@ -3,12 +3,14 @@ import { useAuthStore } from '../store/auth.store';
 import { NavigationProvider, useNavigation } from './NavigationContext';
 
 // Screens
-import { LoginScreen } from '../screens/LoginScreen.new';
-import { RegisterScreen } from '../screens/RegisterScreen.new';
-import { DashboardScreen } from '../screens/DashboardScreen.new';
+import { LoginScreen } from '../screens/LoginScreen';
+import { RegisterScreen } from '../screens/RegisterScreen';
+import { DashboardScreen } from '../screens/DashboardScreen';
 import { ServicesScreen } from '../screens/ServicesScreen';
 import { TransactionsScreen } from '../screens/TransactionsScreen';
 import { MyReservationsScreen } from '../screens/MyReservationsScreen';
+import { MyServicesScreen } from '../screens/MyServicesScreen';
+import { ServiceReservationsScreen } from '../screens/ServiceReservationsScreen';
 import { LoadingScreen } from '../screens/LoadingScreen';
 
 function NavigationScreens() {
@@ -47,9 +49,9 @@ function NavigationScreens() {
     case 'MyReservations':
       return <MyReservationsScreen />;
     case 'MyServices':
-      return <DashboardScreen />; // TODO: Criar MyServicesScreen
+      return <MyServicesScreen />;
     case 'ServiceReservations':
-      return <DashboardScreen />; // TODO: Criar ServiceReservationsScreen
+      return <ServiceReservationsScreen />;
     default:
       return <LoginScreen />;
   }

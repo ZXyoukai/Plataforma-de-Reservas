@@ -7,6 +7,9 @@ export interface Service {
   providerName?: string;
   createdAt: Date;
   updatedAt: Date;
+  _count?: {
+    reservations?: number;
+  };
 }
 
 export interface CreateServiceData {

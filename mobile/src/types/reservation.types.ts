@@ -20,6 +20,16 @@ export interface Reservation {
   status: ReservationStatus;
   createdAt: Date;
   updatedAt: Date;
+  service?: {
+    id: string;
+    name: string;
+    price: number;
+  };
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+  };
 }
 
 export interface CreateReservationData {
