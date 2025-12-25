@@ -18,7 +18,7 @@ export type RootStackParamList = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-export function Navigation() {
+export default function Navigation() {
   const { isAuthenticated, hasCheckedStorage, loadUserFromStorage } = useAuthStore();
 
   useEffect(() => {

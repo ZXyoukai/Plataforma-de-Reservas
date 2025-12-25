@@ -1,5 +1,5 @@
 {
-  "name": "mobile",
+  "name": "app-reservas",
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
@@ -18,13 +18,15 @@
     "nativewind": "^4.2.1",
     "react": "19.1.0",
     "react-native": "0.81.5",
-    "react-native-reanimated": "^4.2.1",
+    "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "^5.6.2",
     "tailwindcss": "^3.4.19",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
+    "@react-native-picker/picker": "^2.11.1",
     "@types/react": "~19.1.0",
+    "babel-preset-expo": "^54.0.9",
     "typescript": "~5.9.2"
   },
   "private": true
