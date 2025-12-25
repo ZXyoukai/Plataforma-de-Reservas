@@ -3,6 +3,12 @@
 /node_modules
 /build
 
+#dev ccp
+*.example
+*.md
+*.ps1
+*.http
+
 # Logs
 logs
 *.log
