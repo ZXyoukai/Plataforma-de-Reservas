@@ -5,7 +5,6 @@
 
 #dev ccp
 *.example
-*.md
 *.ps1
 *.http
 
