@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity, UserRole } from '../entities/user.entity';
 import {
   IUserRepository,
   CreateUserData,
@@ -10,6 +10,13 @@ import {
 @Injectable()
 export class UserRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  private mapToUserEntity(user: any): UserEntity {
+    return new UserEntity({
+      ...user,
+      role: user.role as UserRole,
+    });
+  }
 
   async create(data: CreateUserData): Promise<UserEntity> {
     const user = await this.prisma.user.create({
@@ -22,7 +29,7 @@ export class UserRepository implements IUserRepository {
       },
     });
 
-    return new UserEntity(user);
+    return this.mapToUserEntity(user);
   }
 
   async findById(id: string): Promise<UserEntity | null> {
@@ -30,7 +37,7 @@ export class UserRepository implements IUserRepository {
       where: { id },
     });
 
-    return user ? new UserEntity(user) : null;
+    return user ? this.mapToUserEntity(user) : null;
   }
 
   async findByEmail(email: string): Promise<UserEntity | null> {
@@ -38,7 +45,7 @@ export class UserRepository implements IUserRepository {
       where: { email },
     });
 
-    return user ? new UserEntity(user) : null;
+    return user ? this.mapToUserEntity(user) : null;
   }
 
   async findByNif(nif: string): Promise<UserEntity | null> {
@@ -46,7 +53,7 @@ export class UserRepository implements IUserRepository {
       where: { nif },
     });
 
-    return user ? new UserEntity(user) : null;
+    return user ? this.mapToUserEntity(user) : null;
   }
 
   async update(id: string, data: UpdateUserData): Promise<UserEntity> {
@@ -55,7 +62,7 @@ export class UserRepository implements IUserRepository {
       data,
     });
 
-    return new UserEntity(user);
+    return this.mapToUserEntity(user);
   }
 
   async delete(id: string): Promise<void> {
