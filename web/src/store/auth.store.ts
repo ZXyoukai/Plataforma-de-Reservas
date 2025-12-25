@@ -8,6 +8,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  hasCheckedStorage: boolean; // Flag para saber se já verificou o localStorage
   
   // Actions
   login: (identifier: string, password: string) => Promise<void>;
@@ -23,6 +24,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
   isLoading: false,
   error: null,
+  hasCheckedStorage: false,
 
   login: async (identifier: string, password: string) => {
     set({ isLoading: true, error: null });
@@ -102,12 +104,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: () => {
+    console.log('Fazendo logout...');
     authService.logout();
     set({
       user: null,
       token: null,
       isAuthenticated: false,
       error: null,
+      hasCheckedStorage: true, // Mantém true para não mostrar loading
     });
   },
 
@@ -122,12 +126,19 @@ export const useAuthStore = create<AuthState>((set) => ({
           user,
           token,
           isAuthenticated: true,
+          hasCheckedStorage: true,
         });
+        console.log('Usuário carregado do localStorage:', user.email);
       } catch (error) {
         // Se houver erro ao parsear, limpa o storage
+        console.error('Erro ao carregar usuário do storage:', error);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        set({ hasCheckedStorage: true });
       }
+    } else {
+      // Não tem dados no storage
+      set({ hasCheckedStorage: true });
     }
   },
 
