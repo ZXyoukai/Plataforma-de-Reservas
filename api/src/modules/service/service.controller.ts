@@ -49,7 +49,7 @@ export class ServiceController {
     @Body() createServiceDto: CreateServiceDto,
     @Request() req,
   ): Promise<ServiceResponseDto> {
-    return this.serviceService.create(createServiceDto, req.user.userId);
+    return this.serviceService.create(createServiceDto, req.user.id);
   }
 
   @Get()
@@ -84,7 +84,7 @@ export class ServiceController {
     description: 'Apenas prestadores de serviço',
   })
   async findMyServices(@Request() req): Promise<ServiceResponseDto[]> {
-    return this.serviceService.findByProvider(req.user.userId);
+    return this.serviceService.findByProvider(req.user.id);
   }
 
   @Get(':id')
@@ -131,7 +131,7 @@ export class ServiceController {
     @Body() updateServiceDto: UpdateServiceDto,
     @Request() req,
   ): Promise<ServiceResponseDto> {
-    return this.serviceService.update(id, updateServiceDto, req.user.userId);
+    return this.serviceService.update(id, updateServiceDto, req.user.id);
   }
 
   @Delete(':id')
@@ -155,6 +155,6 @@ export class ServiceController {
     description: 'Serviço não encontrado',
   })
   async delete(@Param('id') id: string, @Request() req): Promise<void> {
-    return this.serviceService.delete(id, req.user.userId);
+    return this.serviceService.delete(id, req.user.id);
   }
 }

@@ -57,7 +57,7 @@ export class ReservationController {
     @Body() createReservationDto: CreateReservationDto,
     @Request() req,
   ): Promise<ReservationResponseDto> {
-    return this.reservationService.create(createReservationDto, req.user.userId);
+    return this.reservationService.create(createReservationDto, req.user.id);
   }
 
   @Get('my-reservations')
@@ -77,7 +77,7 @@ export class ReservationController {
     description: 'Apenas clientes',
   })
   async findMyReservations(@Request() req): Promise<ReservationResponseDto[]> {
-    return this.reservationService.findMyReservations(req.user.userId);
+    return this.reservationService.findMyReservations(req.user.id);
   }
 
   @Get('service-reservations')
@@ -99,7 +99,7 @@ export class ReservationController {
   async findServiceReservations(
     @Request() req,
   ): Promise<ReservationResponseDto[]> {
-    return this.reservationService.findServiceReservations(req.user.userId);
+    return this.reservationService.findServiceReservations(req.user.id);
   }
 
   @Get(':id')
@@ -125,7 +125,7 @@ export class ReservationController {
     @Param('id') id: string,
     @Request() req,
   ): Promise<ReservationResponseDto> {
-    return this.reservationService.findById(id, req.user.userId);
+    return this.reservationService.findById(id, req.user.id);
   }
 
   @Put(':id/status')
@@ -156,7 +156,7 @@ export class ReservationController {
     return this.reservationService.updateStatus(
       id,
       updateStatusDto,
-      req.user.userId,
+      req.user.id,
     );
   }
 
@@ -181,6 +181,6 @@ export class ReservationController {
     description: 'Reserva não encontrada',
   })
   async cancel(@Param('id') id: string, @Request() req): Promise<void> {
-    return this.reservationService.cancel(id, req.user.userId);
+    return this.reservationService.cancel(id, req.user.id);
   }
 }
