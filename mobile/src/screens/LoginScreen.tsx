@@ -51,7 +51,6 @@ export function LoginScreen({ navigation }: Props) {
       >
         <ScrollView
           contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
         >
           <View style={styles.content}>
             {/* Logo/Title */}
@@ -70,8 +69,6 @@ export function LoginScreen({ navigation }: Props) {
                   placeholderTextColor="#9CA3AF"
                   value={identifier}
                   onChangeText={setIdentifier}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
                 />
               </View>
 
@@ -90,8 +87,6 @@ export function LoginScreen({ navigation }: Props) {
               <TouchableOpacity
                 style={[styles.button, isLoading && styles.buttonDisabled]}
                 onPress={handleLogin}
-                disabled={isLoading}
-                activeOpacity={0.7}
               >
                 {isLoading ? (
                   <ActivityIndicator color="#0A0E27" />
@@ -149,7 +144,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   form: {
-    gap: 16,
+    // gap não é suportado em todas versões
   },
   inputGroup: {
     marginBottom: 16,

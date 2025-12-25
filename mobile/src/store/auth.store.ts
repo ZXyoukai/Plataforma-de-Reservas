@@ -105,26 +105,24 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   loadUserFromStorage: async () => {
     try {
+      console.log('Verificando storage...');
       const token = await SecureStore.getItemAsync('token');
       const userStr = await SecureStore.getItemAsync('user');
       
+      console.log('Token encontrado:', token ? 'sim' : 'não');
+      console.log('User encontrado:', userStr ? 'sim' : 'não');
+      
       if (token && userStr) {
-        try {
-          const user = JSON.parse(userStr);
-          set({
-            user,
-            token,
-            isAuthenticated: true,
-            hasCheckedStorage: true,
-          });
-          console.log('Usuário carregado do storage:', user.email);
-        } catch (error) {
-          console.error('Erro ao parsear usuário:', error);
-          await SecureStore.deleteItemAsync('token');
-          await SecureStore.deleteItemAsync('user');
-          set({ hasCheckedStorage: true });
-        }
+        const user = JSON.parse(userStr);
+        set({
+          user,
+          token,
+          isAuthenticated: true,
+          hasCheckedStorage: true,
+        });
+        console.log('Usuário carregado do storage:', user.email);
       } else {
+        console.log('Nenhum dado no storage');
         set({ hasCheckedStorage: true });
       }
     } catch (error) {

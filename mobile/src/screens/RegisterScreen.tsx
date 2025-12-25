@@ -56,7 +56,6 @@ export function RegisterScreen({ navigation }: Props) {
       >
         <ScrollView
           contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
         >
           <View style={styles.content}>
             <Text style={styles.title}>Criar Conta</Text>
@@ -84,8 +83,6 @@ export function RegisterScreen({ navigation }: Props) {
                   placeholderTextColor="#9CA3AF"
                   value={email}
                   onChangeText={setEmail}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
                 />
               </View>
 
@@ -97,7 +94,6 @@ export function RegisterScreen({ navigation }: Props) {
                   placeholderTextColor="#9CA3AF"
                   value={nif}
                   onChangeText={setNif}
-                  keyboardType="numeric"
                 />
               </View>
 
@@ -133,7 +129,6 @@ export function RegisterScreen({ navigation }: Props) {
               <TouchableOpacity
                 style={[styles.button, isLoading && styles.buttonDisabled]}
                 onPress={handleRegister}
-                disabled={isLoading}
               >
                 {isLoading ? (
                   <ActivityIndicator color="#0A0E27" />
@@ -187,7 +182,7 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   form: {
-    gap: 16,
+    // gap não é suportado em todas versões
   },
   inputGroup: {
     marginBottom: 16,
