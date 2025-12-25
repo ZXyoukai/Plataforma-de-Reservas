@@ -33,8 +33,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       throw new Error('Não é possível limpar o banco de dados em produção!');
     }
 
-    await this.user.deleteMany();
+    await this.reservation.deleteMany();
     await this.service.deleteMany();
+    await this.user.deleteMany();
     
     console.log('Banco de dados limpo');
   }

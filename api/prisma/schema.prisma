@@ -23,16 +23,17 @@ enum Status {
 }
 
 model User {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  email     String    @unique
-  nif       String    @unique
-  name      String
-  password  String
-  credit    Float     @default(0)
-  role      Role      @default(CLIENT)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  services  Service[] @relation("ProviderServices")
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  email        String        @unique
+  nif          String        @unique
+  name         String
+  password     String
+  credit       Float         @default(0)
+  role         Role          @default(CLIENT)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  services     Service[]     @relation("ProviderServices")
+  reservations Reservation[] @relation("ClientReservations")
 }
 
 model Service {
@@ -52,9 +53,11 @@ model Service {
 model Reservation {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String   @db.ObjectId
+  user      User     @relation("ClientReservations", fields: [userId], references: [id])
   serviceId String   @db.ObjectId
   service   Service  @relation(fields: [serviceId], references: [id])
   date      DateTime
+  amount    Float
   status    Status   @default(PENDING)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
