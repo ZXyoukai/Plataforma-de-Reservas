@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { User } from '../types/auth.types';
+import type { User, RegisterData } from '../types/auth.types';
 import { authService } from '../services/auth.service';
 
 interface AuthState {
@@ -11,6 +11,7 @@ interface AuthState {
   
   // Actions
   login: (identifier: string, password: string) => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
   logout: () => void;
   loadUserFromStorage: () => void;
   clearError: () => void;
@@ -40,11 +41,61 @@ export const useAuthStore = create<AuthState>((set) => ({
         error: null,
       });
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Erro ao fazer login';
+      // Extrai mensagem de erro detalhada da API
+      let errorMessage = 'Erro ao fazer login';
+      
+      if (error.response?.data) {
+        const data = error.response.data;
+        // Se for array de mensagens (validação)
+        if (Array.isArray(data.message)) {
+          errorMessage = data.message.join(', ');
+        } else if (typeof data.message === 'string') {
+          errorMessage = data.message;
+        } else if (data.error) {
+          errorMessage = data.error;
+        }
+      }
+      
       set({
         error: errorMessage,
         isLoading: false,
         isAuthenticated: false,
+      });
+      throw error;
+    }
+  },
+
+  register: async (data: RegisterData) => {
+    set({ isLoading: true, error: null });
+    try {
+      await authService.register(data);
+      
+      // Após registro bem-sucedido, faz login automaticamente
+      await useAuthStore.getState().login(data.email, data.password);
+      
+      set({
+        isLoading: false,
+        error: null,
+      });
+    } catch (error: any) {
+      // Extrai mensagem de erro detalhada da API
+      let errorMessage = 'Erro ao criar conta';
+      
+      if (error.response?.data) {
+        const data = error.response.data;
+        // Se for array de mensagens (validação)
+        if (Array.isArray(data.message)) {
+          errorMessage = data.message.join(', ');
+        } else if (typeof data.message === 'string') {
+          errorMessage = data.message;
+        } else if (data.error) {
+          errorMessage = data.error;
+        }
+      }
+      
+      set({
+        error: errorMessage,
+        isLoading: false,
       });
       throw error;
     }
