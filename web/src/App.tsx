@@ -4,6 +4,8 @@ import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ServicesPage } from './pages/ServicesPage';
+import { BrowseServicesPage } from './pages/BrowseServicesPage';
+import { TransactionsPage } from './pages/TransactionsPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { useAuthStore } from './store/auth.store';
 
@@ -36,6 +38,22 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/browse-services"
+          element={
+            <ProtectedRoute>
+              <BrowseServicesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/transactions"
+          element={
+            <ProtectedRoute>
+              <TransactionsPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
@@ -44,4 +62,3 @@ function App() {
 }
 
 export default App;
-

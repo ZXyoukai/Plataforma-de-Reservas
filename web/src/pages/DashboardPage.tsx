@@ -1,14 +1,20 @@
 import { useAuthStore } from '../store/auth.store';
 import { useNavigate } from 'react-router-dom';
 import { UserRole } from '../types/auth.types';
+import { useState } from 'react';
 
 export const DashboardPage = () => {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = () => {
-    logout();
-    navigate('/login');
+    setIsLoggingOut(true);
+    // Pequeno delay para animação suave
+    setTimeout(() => {
+      logout();
+      navigate('/login');
+    }, 300);
   };
 
   return (
@@ -23,7 +29,7 @@ export const DashboardPage = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <span className="text-xl font-bold">Bulir</span>
+              <span className="text-xl font-bold">Plataforma de Reservas</span>
             </div>
 
             <div className="flex items-center gap-4">
@@ -33,9 +39,11 @@ export const DashboardPage = () => {
               </div>
               <button
                 onClick={handleLogout}
-                className="btn-outline py-2 px-4 text-sm"
+                className="btn-outline py-2 px-4 text-sm transition-opacity duration-300"
+                disabled={isLoggingOut}
+                style={{ opacity: isLoggingOut ? 0.5 : 1 }}
               >
-                Sair
+                {isLoggingOut ? 'Saindo...' : 'Sair'}
               </button>
             </div>
           </div>
@@ -46,7 +54,7 @@ export const DashboardPage = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-          <p className="text-gray-400">Bem-vindo à plataforma Bulir, {user?.name}!</p>
+          <p className="text-gray-400">Bem-vindo à nossa Plataforma de Reservas, {user?.name}!</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -85,10 +93,10 @@ export const DashboardPage = () => {
         </div>
 
         {/* Ações Rápidas */}
-        {user?.role === 'SERVICE_PROVIDER' && (
-          <div className="mt-8">
-            <h2 className="text-2xl font-bold mb-4">Ações Rápidas</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Ações Rápidas</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {user?.role === UserRole.SERVICE_PROVIDER ? (
               <button
                 onClick={() => navigate('/services')}
                 className="card hover:border-primary/50 transition cursor-pointer text-left group"
@@ -105,9 +113,44 @@ export const DashboardPage = () => {
                   </div>
                 </div>
               </button>
-            </div>
+            ) : (
+              <button
+                onClick={() => navigate('/browse-services')}
+                className="card hover:border-primary/50 transition cursor-pointer text-left group"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition">
+                    <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg">Contratar Serviços</h3>
+                    <p className="text-gray-400 text-sm">Explore e contrate serviços</p>
+                  </div>
+                </div>
+              </button>
+            )}
+            
+            {/* Histórico de Transações - Disponível para todos */}
+            <button
+              onClick={() => navigate('/transactions')}
+              className="card hover:border-primary/50 transition cursor-pointer text-left group"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition">
+                  <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg">Histórico</h3>
+                  <p className="text-gray-400 text-sm">Ver todas as transações</p>
+                </div>
+              </div>
+            </button>
           </div>
-        )}
+        </div>
 
         {/* Informações */}
         <div className="mt-8">

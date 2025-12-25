@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.store';
@@ -13,6 +13,16 @@ export const RegisterPage = () => {
   const navigate = useNavigate();
   
   const { register, isLoading, error, clearError } = useAuthStore();
+
+  // Auto-limpar erro após 5 segundos
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        clearError();
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, clearError]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -38,7 +48,7 @@ export const RegisterPage = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <span className="text-3xl font-bold">Bulir</span>
+            <span className="text-3xl font-bold">Plataforma de Reservas</span>
           </div>
         </div>
 
@@ -50,8 +60,13 @@ export const RegisterPage = () => {
           </p>
 
           {error && (
-            <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg mb-4 text-sm">
-              {error}
+            <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg mb-4 text-sm animate-shake">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{error}</span>
+              </div>
             </div>
           )}
 
@@ -168,7 +183,7 @@ export const RegisterPage = () => {
 
         {/* Footer */}
         <p className="text-center text-gray-500 text-sm mt-8">
-          © 2024 Bulir. Todos os direitos reservados.
+          © 2025 Plataforma de Reservas. Todos os direitos reservados.
         </p>
       </div>
     </div>
