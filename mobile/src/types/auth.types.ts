@@ -10,6 +10,8 @@ export interface User {
   nif: string;
   credit: number;
   role: UserRole | string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface AuthResponse {

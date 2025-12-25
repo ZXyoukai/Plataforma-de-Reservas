@@ -14,3 +14,9 @@ export interface CreateServiceData {
   description: string;
   price: number;
 }
+
+export interface UpdateServiceData {
+  name?: string;
+  description?: string;
+  price?: number;
+}

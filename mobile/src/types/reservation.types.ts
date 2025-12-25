@@ -24,5 +24,9 @@ export interface Reservation {
 
 export interface CreateReservationData {
   serviceId: string;
-  date: string;
+  date: string; // Data em formato ISO 8601
+}
+
+export interface UpdateReservationStatusData {
+  status: ReservationStatus;
 }

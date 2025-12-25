@@ -9,6 +9,8 @@ import {
   ActivityIndicator,
   StyleSheet,
   Platform,
+  SafeAreaView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '../navigation/NavigationContext';
@@ -47,8 +49,12 @@ export function RegisterScreen() {
   }, [error]);
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+    <SafeAreaView style={styles.safeArea}>
+      <KeyboardAvoidingView 
+        style={styles.container} 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.content}>
           <Text style={styles.title}>Criar Conta</Text>
           <Text style={styles.subtitle}>
@@ -141,11 +147,16 @@ export function RegisterScreen() {
           </View>
         </View>
       </ScrollView>
-    </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#0A0E27',
+  },
   container: {
     flex: 1,
     backgroundColor: '#0A0E27',

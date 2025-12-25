@@ -7,6 +7,10 @@ import {
   Alert,
   ActivityIndicator,
   StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { useNavigation } from '../navigation/NavigationContext';
 import { useAuthStore } from '../store/auth.store';
@@ -40,8 +44,13 @@ export function LoginScreen() {
   }, [error]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
+    <SafeAreaView style={styles.safeArea}>
+      <KeyboardAvoidingView 
+        style={styles.container} 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <View style={styles.content}>
         {/* Logo/Title */}
         <View style={styles.header}>
           <Text style={styles.title}>Bulir</Text>
@@ -95,14 +104,23 @@ export function LoginScreen() {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#0A0E27',
+  },
   container: {
     flex: 1,
     backgroundColor: '#0A0E27',
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   content: {
     flex: 1,

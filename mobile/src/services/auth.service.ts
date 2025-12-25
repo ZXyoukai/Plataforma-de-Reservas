@@ -3,13 +3,26 @@ import * as SecureStore from 'expo-secure-store';
 import type { AuthResponse, LoginData, RegisterData, User } from '../types/auth.types';
 
 export const authService = {
-  login: async (data: LoginData): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>('/authentication/login', data);
+  login: async (credentials: LoginData): Promise<AuthResponse> => {
+    // Determina se o identificador é email ou NIF
+    const isEmail = credentials.identifier.includes('@');
+    
+    const response = await api.post<AuthResponse>('/authentication/login', {
+      [isEmail ? 'email' : 'nif']: credentials.identifier,
+      password: credentials.password,
+    });
+    
     return response.data;
   },
 
   register: async (data: RegisterData): Promise<User> => {
-    const response = await api.post<User>('/user-registration', data);
+    const response = await api.post<User>('/user-registration', {
+      name: data.name,
+      nif: data.nif,
+      email: data.email,
+      password: data.password,
+      role: data.role,
+    });
     return response.data;
   },
 

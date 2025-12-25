@@ -6,6 +6,9 @@ import { NavigationProvider, useNavigation } from './NavigationContext';
 import { LoginScreen } from '../screens/LoginScreen.new';
 import { RegisterScreen } from '../screens/RegisterScreen.new';
 import { DashboardScreen } from '../screens/DashboardScreen.new';
+import { ServicesScreen } from '../screens/ServicesScreen';
+import { TransactionsScreen } from '../screens/TransactionsScreen';
+import { MyReservationsScreen } from '../screens/MyReservationsScreen';
 import { LoadingScreen } from '../screens/LoadingScreen';
 
 function NavigationScreens() {
@@ -37,6 +40,16 @@ function NavigationScreens() {
       return <RegisterScreen />;
     case 'Dashboard':
       return <DashboardScreen />;
+    case 'Services':
+      return <ServicesScreen />;
+    case 'Transactions':
+      return <TransactionsScreen />;
+    case 'MyReservations':
+      return <MyReservationsScreen />;
+    case 'MyServices':
+      return <DashboardScreen />; // TODO: Criar MyServicesScreen
+    case 'ServiceReservations':
+      return <DashboardScreen />; // TODO: Criar ServiceReservationsScreen
     default:
       return <LoginScreen />;
   }
