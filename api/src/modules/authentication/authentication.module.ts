@@ -7,13 +7,17 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserRepository } from '../../repositories/user.repository';
 import { BcryptPasswordHasher } from '../../providers/bcrypt-password-hasher.provider';
 import { JwtTokenGenerator } from '../../providers/jwt-token-generator.provider';
+import { ConfigService } from '../../config/config.service';
 
 @Module({
   imports: [
     PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'your-secret-key-change-in-production',
-      signOptions: { expiresIn: '24h' },
+    JwtModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.jwtSecret,
+        signOptions: { expiresIn: configService.jwtExpiresIn as any },
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [AuthenticationController],

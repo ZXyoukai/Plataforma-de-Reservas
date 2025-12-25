@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '../../generated/prisma';
+import { PrismaService } from '../database/prisma.service';
 import { UserEntity } from '../entities/user.entity';
 import {
   IUserRepository,
@@ -9,11 +9,7 @@ import {
 
 @Injectable()
 export class UserRepository implements IUserRepository {
-  private prisma: PrismaClient;
-
-  constructor() {
-    this.prisma = new PrismaClient();
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateUserData): Promise<UserEntity> {
     const user = await this.prisma.user.create({
@@ -66,9 +62,5 @@ export class UserRepository implements IUserRepository {
     await this.prisma.user.delete({
       where: { id },
     });
-  }
-
-  async onModuleDestroy() {
-    await this.prisma.$disconnect();
   }
 }
