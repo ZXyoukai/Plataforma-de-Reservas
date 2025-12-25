@@ -9,6 +9,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  StyleSheet,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation';
@@ -43,34 +44,28 @@ export function LoginScreen({ navigation }: Props) {
   }, [error]);
 
   return (
-    <SafeAreaView className="flex-1 bg-dark">
+    <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1"
+        style={styles.keyboardView}
       >
         <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
+          contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
         >
-          <View className="flex-1 justify-center px-6">
+          <View style={styles.content}>
             {/* Logo/Title */}
-            <View className="mb-10">
-              <Text className="text-5xl font-bold text-primary text-center">
-                Bulir
-              </Text>
-              <Text className="text-white text-center mt-2 text-lg">
-                Plataforma de Reservas
-              </Text>
+            <View style={styles.header}>
+              <Text style={styles.title}>Bulir</Text>
+              <Text style={styles.subtitle}>Plataforma de Reservas</Text>
             </View>
 
             {/* Form */}
-            <View className="space-y-4">
-              <View>
-                <Text className="text-white mb-2 text-base">
-                  Email ou NIF
-                </Text>
+            <View style={styles.form}>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Email ou NIF</Text>
                 <TextInput
-                  className="bg-dark-lighter text-white p-4 rounded-lg text-base"
+                  style={styles.input}
                   placeholder="Digite seu email ou NIF"
                   placeholderTextColor="#9CA3AF"
                   value={identifier}
@@ -80,41 +75,38 @@ export function LoginScreen({ navigation }: Props) {
                 />
               </View>
 
-              <View>
-                <Text className="text-white mb-2 text-base">Senha</Text>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Senha</Text>
                 <TextInput
-                  className="bg-dark-lighter text-white p-4 rounded-lg text-base"
+                  style={styles.input}
                   placeholder="Digite sua senha"
                   placeholderTextColor="#9CA3AF"
                   value={password}
                   onChangeText={setPassword}
-                  secureTextEntry
+                  secureTextEntry={true}
                 />
               </View>
 
               <TouchableOpacity
-                className="bg-primary p-4 rounded-lg mt-6"
+                style={[styles.button, isLoading && styles.buttonDisabled]}
                 onPress={handleLogin}
                 disabled={isLoading}
+                activeOpacity={0.7}
               >
                 {isLoading ? (
                   <ActivityIndicator color="#0A0E27" />
                 ) : (
-                  <Text className="text-dark text-center font-bold text-lg">
-                    Entrar
-                  </Text>
+                  <Text style={styles.buttonText}>Entrar</Text>
                 )}
               </TouchableOpacity>
 
               <TouchableOpacity
-                className="mt-4"
+                style={styles.registerLink}
                 onPress={() => navigation.navigate('Register')}
               >
-                <Text className="text-gray-400 text-center">
+                <Text style={styles.registerText}>
                   Não tem uma conta?{' '}
-                  <Text className="text-primary font-semibold">
-                    Cadastre-se
-                  </Text>
+                  <Text style={styles.registerTextBold}>Cadastre-se</Text>
                 </Text>
               </TouchableOpacity>
             </View>
@@ -124,3 +116,80 @@ export function LoginScreen({ navigation }: Props) {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0A0E27',
+  },
+  keyboardView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+  header: {
+    marginBottom: 40,
+  },
+  title: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: '#00D9BC',
+    textAlign: 'center',
+  },
+  subtitle: {
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginTop: 8,
+    fontSize: 18,
+  },
+  form: {
+    gap: 16,
+  },
+  inputGroup: {
+    marginBottom: 16,
+  },
+  label: {
+    color: '#FFFFFF',
+    marginBottom: 8,
+    fontSize: 16,
+  },
+  input: {
+    backgroundColor: '#1E2139',
+    color: '#FFFFFF',
+    padding: 16,
+    borderRadius: 8,
+    fontSize: 16,
+  },
+  button: {
+    backgroundColor: '#00D9BC',
+    padding: 16,
+    borderRadius: 8,
+    marginTop: 24,
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
+  buttonText: {
+    color: '#0A0E27',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  registerLink: {
+    marginTop: 16,
+  },
+  registerText: {
+    color: '#9CA3AF',
+    textAlign: 'center',
+  },
+  registerTextBold: {
+    color: '#00D9BC',
+    fontWeight: '600',
+  },
+});

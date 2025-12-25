@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuthStore } from '../store/auth.store';
 
@@ -11,38 +11,78 @@ export function DashboardScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-dark">
-      <View className="flex-1 p-6">
-        <Text className="text-3xl font-bold text-white mb-6">
-          Bem-vindo!
-        </Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Bem-vindo!</Text>
 
-        <View className="bg-dark-lighter p-6 rounded-lg mb-6">
-          <Text className="text-gray-400 text-sm mb-2">Nome</Text>
-          <Text className="text-white text-lg font-semibold mb-4">
-            {user?.name}
-          </Text>
+        <View style={styles.card}>
+          <Text style={styles.label}>Nome</Text>
+          <Text style={styles.value}>{user?.name}</Text>
 
-          <Text className="text-gray-400 text-sm mb-2">Email</Text>
-          <Text className="text-white text-lg font-semibold mb-4">
-            {user?.email}
-          </Text>
+          <Text style={[styles.label, styles.spacer]}>Email</Text>
+          <Text style={styles.value}>{user?.email}</Text>
 
-          <Text className="text-gray-400 text-sm mb-2">Saldo</Text>
-          <Text className="text-primary text-2xl font-bold">
-            {user?.credit.toFixed(2)} AOA
-          </Text>
+          <Text style={[styles.label, styles.spacer]}>Saldo</Text>
+          <Text style={styles.credit}>{user?.credit.toFixed(2)} AOA</Text>
         </View>
 
-        <TouchableOpacity
-          className="bg-red-500 p-4 rounded-lg mt-auto"
-          onPress={handleLogout}
-        >
-          <Text className="text-white text-center font-bold text-lg">
-            Sair
-          </Text>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutText}>Sair</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0A0E27',
+  },
+  content: {
+    flex: 1,
+    padding: 24,
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 24,
+  },
+  card: {
+    backgroundColor: '#1E2139',
+    padding: 24,
+    borderRadius: 8,
+    marginBottom: 24,
+  },
+  label: {
+    color: '#9CA3AF',
+    fontSize: 14,
+    marginBottom: 8,
+  },
+  value: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  spacer: {
+    marginTop: 16,
+  },
+  credit: {
+    color: '#00D9BC',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  logoutButton: {
+    backgroundColor: '#EF4444',
+    padding: 16,
+    borderRadius: 8,
+    marginTop: 'auto',
+  },
+  logoutText: {
+    color: '#FFFFFF',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+});

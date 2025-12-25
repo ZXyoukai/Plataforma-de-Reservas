@@ -9,6 +9,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  StyleSheet,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -48,28 +49,26 @@ export function RegisterScreen({ navigation }: Props) {
   }, [error]);
 
   return (
-    <SafeAreaView className="flex-1 bg-dark">
+    <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1"
+        style={styles.keyboardView}
       >
         <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
+          contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
         >
-          <View className="flex-1 justify-center px-6 py-8">
-            <Text className="text-4xl font-bold text-primary mb-2">
-              Criar Conta
-            </Text>
-            <Text className="text-gray-400 mb-8">
+          <View style={styles.content}>
+            <Text style={styles.title}>Criar Conta</Text>
+            <Text style={styles.subtitle}>
               Preencha os dados para se cadastrar
             </Text>
 
-            <View className="space-y-4">
-              <View>
-                <Text className="text-white mb-2">Nome Completo</Text>
+            <View style={styles.form}>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Nome Completo</Text>
                 <TextInput
-                  className="bg-dark-lighter text-white p-4 rounded-lg"
+                  style={styles.input}
                   placeholder="Digite seu nome"
                   placeholderTextColor="#9CA3AF"
                   value={name}
@@ -77,10 +76,10 @@ export function RegisterScreen({ navigation }: Props) {
                 />
               </View>
 
-              <View>
-                <Text className="text-white mb-2">Email</Text>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Email</Text>
                 <TextInput
-                  className="bg-dark-lighter text-white p-4 rounded-lg"
+                  style={styles.input}
                   placeholder="Digite seu email"
                   placeholderTextColor="#9CA3AF"
                   value={email}
@@ -90,10 +89,10 @@ export function RegisterScreen({ navigation }: Props) {
                 />
               </View>
 
-              <View>
-                <Text className="text-white mb-2">NIF</Text>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>NIF</Text>
                 <TextInput
-                  className="bg-dark-lighter text-white p-4 rounded-lg"
+                  style={styles.input}
                   placeholder="Digite seu NIF"
                   placeholderTextColor="#9CA3AF"
                   value={nif}
@@ -102,25 +101,25 @@ export function RegisterScreen({ navigation }: Props) {
                 />
               </View>
 
-              <View>
-                <Text className="text-white mb-2">Senha</Text>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Senha</Text>
                 <TextInput
-                  className="bg-dark-lighter text-white p-4 rounded-lg"
+                  style={styles.input}
                   placeholder="Digite sua senha"
                   placeholderTextColor="#9CA3AF"
                   value={password}
                   onChangeText={setPassword}
-                  secureTextEntry
+                  secureTextEntry={true}
                 />
               </View>
 
-              <View>
-                <Text className="text-white mb-2">Tipo de Conta</Text>
-                <View className="bg-dark-lighter rounded-lg">
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Tipo de Conta</Text>
+                <View style={styles.pickerContainer}>
                   <Picker
                     selectedValue={role}
-                    onValueChange={(itemValue) => setRole(itemValue)}
-                    style={{ color: 'white' }}
+                    onValueChange={(itemValue: UserRole) => setRole(itemValue)}
+                    style={styles.picker}
                   >
                     <Picker.Item label="Cliente" value={UserRole.CLIENT} />
                     <Picker.Item
@@ -132,26 +131,24 @@ export function RegisterScreen({ navigation }: Props) {
               </View>
 
               <TouchableOpacity
-                className="bg-primary p-4 rounded-lg mt-6"
+                style={[styles.button, isLoading && styles.buttonDisabled]}
                 onPress={handleRegister}
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <ActivityIndicator color="#0A0E27" />
                 ) : (
-                  <Text className="text-dark text-center font-bold text-lg">
-                    Cadastrar
-                  </Text>
+                  <Text style={styles.buttonText}>Cadastrar</Text>
                 )}
               </TouchableOpacity>
 
               <TouchableOpacity
-                className="mt-4"
+                style={styles.loginLink}
                 onPress={() => navigation.goBack()}
               >
-                <Text className="text-gray-400 text-center">
+                <Text style={styles.loginText}>
                   Já tem uma conta?{' '}
-                  <Text className="text-primary font-semibold">Entrar</Text>
+                  <Text style={styles.loginTextBold}>Entrar</Text>
                 </Text>
               </TouchableOpacity>
             </View>
@@ -161,3 +158,82 @@ export function RegisterScreen({ navigation }: Props) {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0A0E27',
+  },
+  keyboardView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+  },
+  title: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#00D9BC',
+    marginBottom: 8,
+  },
+  subtitle: {
+    color: '#9CA3AF',
+    marginBottom: 32,
+  },
+  form: {
+    gap: 16,
+  },
+  inputGroup: {
+    marginBottom: 16,
+  },
+  label: {
+    color: '#FFFFFF',
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: '#1E2139',
+    color: '#FFFFFF',
+    padding: 16,
+    borderRadius: 8,
+  },
+  pickerContainer: {
+    backgroundColor: '#1E2139',
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  picker: {
+    color: '#FFFFFF',
+  },
+  button: {
+    backgroundColor: '#00D9BC',
+    padding: 16,
+    borderRadius: 8,
+    marginTop: 24,
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
+  buttonText: {
+    color: '#0A0E27',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  loginLink: {
+    marginTop: 16,
+  },
+  loginText: {
+    color: '#9CA3AF',
+    textAlign: 'center',
+  },
+  loginTextBold: {
+    color: '#00D9BC',
+    fontWeight: '600',
+  },
+});
