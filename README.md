@@ -12,7 +12,7 @@ Sistema completo de gerenciamento de reservas de serviços com autenticação de
 **Documentação Swagger:** **[https://plataforma-de-reservas.onrender.com/api/docs](https://plataforma-de-reservas.onrender.com/api/docs)**
 
 ### 📱 Aplicação Mobile (APK)
-**[Download APK Android v1.0.0](https://wf-artifacts.eascdn.net/builds/internal-st/88c79835-0436-4e52-8281-3abfc5e30b10/3f9d7ec4-87fc-4f6d-aedc-176e6388dc64/019b578f-5196-7457-ae85-a7706cb47acd/application-3f9d7ec4-87fc-4f6d-aedc-176e6388dc64.apk)**
+**[Download APK Android v1.0.0](https://drive.google.com/file/d/1siCRZanf-0QJl1U9CfdLaSHB5KZ-1wYr/view?usp=sharing)**
 
 ---
 
