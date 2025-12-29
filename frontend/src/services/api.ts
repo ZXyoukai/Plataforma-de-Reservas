@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.API_BASE_URL || 'https://plataforma-de-reservas.onrender.com';
+const API_BASE_URL = 'https://plataforma-de-reservas-zz97.onrender.com';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
