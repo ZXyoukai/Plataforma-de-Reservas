@@ -5,11 +5,11 @@ Sistema completo de gerenciamento de reservas de serviços com autenticação de
 ## 🌐 Links de Acesso
 
 ### 🖥️ Aplicação Web
-**[https://plataforma-de-reservas-web.onrender.com](https://plataforma-de-reservas-web.onrender.com)**
+**[https://plataforma-de-reservas-web.onrender.com](https://plataforma-de-reservas.vercel.app)**
 
 ### 📚 API e Documentação
 **API Base URL:** `https://plataforma-de-reservas.onrender.com`  
-**Documentação Swagger:** **[https://plataforma-de-reservas.onrender.com/api/docs](https://plataforma-de-reservas.onrender.com/api/docs)**
+**Documentação Swagger:** **[https://plataforma-de-reservas.onrender.com/api/docs](https://plataforma-de-reservas-7n8l.vercel.app/api/docs)**
 
 ### 📱 Aplicação Mobile (APK)
 **[Download APK Android v1.0.0](https://drive.google.com/file/d/1siCRZanf-0QJl1U9CfdLaSHB5KZ-1wYr/view?usp=sharing)**
